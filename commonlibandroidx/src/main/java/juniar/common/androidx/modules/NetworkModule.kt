@@ -1,12 +1,10 @@
 package juniar.common.androidx.modules
 
-import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import juniar.common.androidx.helper.ConnectionLiveData
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,8 +17,7 @@ import javax.inject.Singleton
 @Module
 open class NetworkModule(
     private val baseUrl: String,
-    private val interceptor: Interceptor,
-    private val context: Context
+    private val interceptor: Interceptor
 ) {
 
     @Provides
@@ -45,10 +42,6 @@ open class NetworkModule(
             .addInterceptor(loggingInterceptor)
             .addInterceptor(interceptor)
             .build()
-
-    @Provides
-    @Singleton
-    fun providesConnectionLiveData() = ConnectionLiveData(context)
 
     @Provides
     @Singleton
