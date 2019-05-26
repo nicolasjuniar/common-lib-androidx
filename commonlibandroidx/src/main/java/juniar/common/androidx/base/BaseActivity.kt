@@ -1,8 +1,6 @@
 package juniar.common.androidx.base
 
-import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
@@ -13,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import juniar.common.androidx.R
 import juniar.common.androidx.helper.ConnectionLiveData
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 abstract class BaseActivity : DaggerAppCompatActivity() {
@@ -36,34 +35,26 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
         disposables.add(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        onSetupLayout(savedInstanceState)
-        onViewReady(savedInstanceState)
-    }
-
     fun setupToolbar(
         toolbarId: Toolbar,
-        tvTitle: TextView? = null,
         @StringRes title: Int = R.string.empty_string,
-        @DrawableRes drawable: Int? = R.drawable.ic_arrow_back_24dp
+        @DrawableRes drawable: Int? = null
     ) {
         setSupportActionBar(toolbarId)
         supportActionBar?.let {
             it.setDisplayShowTitleEnabled(false)
-            it.setDisplayHomeAsUpEnabled(
-                null != drawable
-            )
-            it.setDisplayShowHomeEnabled(null != drawable)
-            drawable?.let { iconUp ->
-                it.setHomeAsUpIndicator(iconUp)
+            val thisSupportActionBar = it
+            drawable?.let { toolbarDrawable ->
+                thisSupportActionBar.setDisplayHomeAsUpEnabled(true)
+                thisSupportActionBar.setDisplayShowHomeEnabled(true)
+                thisSupportActionBar.setHomeAsUpIndicator(toolbarDrawable)
             }
         }
-        tvTitle?.setText(title)
+        toolbar_title.setText(title)
     }
 
-    fun String.changeToolbarTitle(tvTitle: TextView? = null) {
-        tvTitle?.text = this
+    fun changeToolbarTitle(@StringRes title: Int) {
+        toolbar_title.setText(title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -75,9 +66,6 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    protected abstract fun onSetupLayout(savedInstanceState: Bundle?)
-    protected abstract fun onViewReady(savedInstanceState: Bundle?)
 
     override fun onDestroy() {
         disposables.dispose()

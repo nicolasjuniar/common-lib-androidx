@@ -15,6 +15,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import juniar.common.androidx.common.Constant.Common.Companion.EMPTY_STRING
+import timber.log.Timber
 
 fun <T> Observable<T>.transform(): Observable<T> {
     return this.observeOn(AndroidSchedulers.mainThread())
@@ -83,3 +84,13 @@ fun Context.openUrl(url: String) = startActivity(
 )
 
 val sdkVersion = Build.VERSION.SDK_INT
+
+fun String.logDebug(tag: String) = Timber.d(tag, this)
+
+fun String.logInfo(tag: String) = Timber.i(tag, this)
+
+fun String.logWarning(tag: String) = Timber.w(tag, this)
+
+fun String.logError(tag: String) = Timber.e(tag, this)
+
+fun String.logVerbose(tag: String) = Timber.v(tag, this)
