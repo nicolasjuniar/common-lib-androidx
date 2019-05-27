@@ -1,6 +1,7 @@
 package juniar.common.androidx.base
 
 import android.view.MenuItem
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
@@ -11,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import juniar.common.androidx.R
 import juniar.common.androidx.helper.ConnectionLiveData
+import juniar.common.androidx.utils.getColorCompat
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
@@ -38,7 +40,9 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
     fun setupToolbar(
         toolbarId: Toolbar,
         @StringRes title: Int = R.string.empty_string,
-        @DrawableRes drawable: Int? = null
+        @DrawableRes drawable: Int? = null,
+        @ColorRes backgroundColor: Int,
+        @ColorRes textColor: Int
     ) {
         setSupportActionBar(toolbarId)
         supportActionBar?.let {
@@ -50,7 +54,11 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
                 thisSupportActionBar.setHomeAsUpIndicator(toolbarDrawable)
             }
         }
-        toolbar_title.setText(title)
+        with(toolbar_title) {
+            setText(title)
+            setTextColor(getColorCompat(textColor))
+        }
+        toolbar.setBackgroundColor(getColorCompat(backgroundColor))
     }
 
     fun changeToolbarTitle(@StringRes title: Int) {
